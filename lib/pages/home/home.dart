@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter_starbucks/constant/color_constant.dart';
+import 'package:flutter_starbucks/pages/home/titleAnimation.dart';
 
 class LLHomePage extends StatelessWidget {
   @override
@@ -105,13 +107,23 @@ class _HomeMainState extends State<HomeMain> with TickerProviderStateMixin {
         animationController.forward(from: 0);
       },
       child: CustomScrollView(
+
         physics: ClampingScrollPhysics(),
         slivers: <Widget>[
           SliverAppBar(
             pinned: true,
             floating: true,
-            expandedHeight:
-                (227 * width) / 434 - 44 + extraPicHeight + 20 + 35 + 10 + 80,
+            expandedHeight: (227 * width) / 434 -
+                44 +
+                extraPicHeight ,
+//                20 +
+//                35 +
+//                10 +
+//                60 +
+//                35 +
+//                (((width - 30) / 2) * 274) / 482 +
+//                10 +
+//                60,
             backgroundColor: Colors.white,
 //            flexibleSpace: new FlexibleSpaceBar(
 //              background: Image.asset("assets/images/homepage.png", fit: BoxFit.cover),
@@ -124,10 +136,9 @@ class _HomeMainState extends State<HomeMain> with TickerProviderStateMixin {
             ),
           ),
           SliverList(
-            delegate: SliverChildBuilderDelegate((ctx, index) {
-              return Text("$index");
-            }, childCount: 300),
-          )
+              delegate: SliverChildBuilderDelegate((context, index) {
+            return EveryDayStar();
+          }, childCount: 1))
         ],
       ),
     );
@@ -145,7 +156,6 @@ class SliverTopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-
     return Stack(
       children: <Widget>[
         Column(
@@ -156,88 +166,269 @@ class SliverTopBar extends StatelessWidget {
               height: (227 * width) / 434 + extraPicHeight,
               fit: fitType,
             ),
-            SizedBox(
-              height: 20,
+//            SizedBox(
+//              height: 20,
+//            ),
+//            createredits(),
+//            LLTitleAnimation(),
+//            createLocation(),
+//            createCard(width),
+//            createwillExpiredCoupons()
+          ],
+        ),
+//        Positioned(
+//          top: (227 * width) / 434 + extraPicHeight - 10,
+//          child: ClipRRect(
+//            borderRadius: BorderRadius.only(
+//              topLeft: Radius.circular(8),
+//              topRight: Radius.circular(8),
+//            ),
+//            child: Container(
+//              height: 30,
+//              width: 750,
+//              color: Colors.white,
+//            ),
+//          ),
+//        ),
+      ],
+    );
+  }
+
+  /*创建积分*/
+  Widget createredits() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(15, 0, 15, 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            width: 150,
+            height: 35,
+            child: Row(
+              children: [
+                Text(
+                  "4.8",
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                ),
+                Icon(
+                  Icons.star,
+                  color: Color.fromARGB(255, 203, 161, 86),
+                )
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: 150,
-                    height: 35,
-                    child: Row(
-                      children: [
-                        Text(
-                          "4.8",
-                          style: TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.bold),
-                        ),
-                        Icon(
-                          Icons.star,
-                          color: Color.fromARGB(255, 203, 161, 86),
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: 35,
-                    child: RaisedButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(28),
+          ),
+          Container(
+            height: 35,
+            child: RaisedButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(28),
 //                          side: BorderSide(color: Colors.red)
-                      ),
-                      color: Color.fromARGB(255, 203, 161, 86),
-                      onPressed: () {},
-                      child: Text(
-                        "8张好礼劵",
-                        style: TextStyle(color: Colors.white,fontSize: 15),
-                      ),
-                    ),
-                  )
-                ],
+              ),
+              color: Color.fromARGB(255, 203, 161, 86),
+              onPressed: () {},
+              child: Text(
+                "8张好礼劵",
+                style: TextStyle(color: Colors.white, fontSize: 15),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(2),
-                  color: Color(0xfff1f1f1),
-                ),
-                height: 60,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Container(
-                      width: 40,
-                      child: Image.asset("assets/images/homeicon.png"),
-                    ),
-                    Text("星星月历来咯，点击查看你的8月有星人时刻"),
-                    Image.asset('assets/images/account_icon_indicator_large~iphone.png',width: 8,)
-                  ],
-                ),
+          )
+        ],
+      ),
+    );
+  }
+
+
+
+  /*创建定位*/
+  Widget createLocation() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(15, 0, 15, 5),
+      child: Container(
+        height: 30,
+        child: Row(
+          children: [
+            Image.asset(
+              "assets/images/home_icon_location~iphone.png",
+              width: 15,
+              height: 15,
+            ),
+            SizedBox(
+              width: 5,
+            ),
+            Expanded(
+              child: Text(
+                "北京方庄通润商务会馆点 | 878m",
+                style: TextStyle(color: Color(0xff6c6c6c)),
+              ),
+            ),
+            Container(
+              child: Row(
+                children: [
+                  Text("更多门店", style: TextStyle(color: Color(0xff4a4845))),
+                  SizedBox(
+                    width: 3,
+                  ),
+                  Image.asset(
+                    'assets/images/account_icon_indicator_large~iphone.png',
+                    width: 6,
+                  )
+                ],
               ),
             )
           ],
         ),
-        Positioned(
-          top: (227 * width) / 434 + extraPicHeight - 10,
-          child: ClipRRect(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(8),
-              topRight: Radius.circular(8),
-            ),
-            child: Container(
-              height: 30,
-              width: 750,
-              color: Colors.white,
-            ),
+      ),
+    );
+  }
+
+  /*创建卡片*/
+  Widget createCard(screenWidth) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          createCardItem(screenWidth, "啡快", "食品双倍星", "在线点，到店取",
+              "assets/images/home_icon_pickup_entrance~iphone.png"),
+          createCardItem(screenWidth, "专星送", "满80免配", "植物基膳食新品尝鲜",
+              "assets/images/home_icon_delivery_entrance~iphone.png"),
+        ],
+      ),
+    );
+  }
+
+  /*创建卡片item*/
+  Widget createCardItem(screenWidth, title, subTitle, content, imgName) {
+    return SizedBox(
+      width: (screenWidth - 30) / 2,
+      height: (((screenWidth - 30) / 2) * 274) / 482,
+      child: Card(
+          elevation: 8.0, //设置阴影
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8.0))), //设置圆角
+          child: Stack(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                            height: 35,
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  title,
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            )),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        ClipRRect(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                            bottomRight: Radius.circular(10),
+                          ),
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(7, 3, 7, 3),
+                            color: Color(0xffff6842),
+                            child: Text(
+                              subTitle,
+                              style:
+                                  TextStyle(fontSize: 12, color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: Text(
+                      content,
+                      style: TextStyle(
+                          fontSize: 12, color: ColorConstant.MainColor),
+                    ),
+                  )
+                ],
+              ),
+              Positioned(
+                right: 10,
+                bottom: 10,
+                width: 50,
+                height: 50,
+                child: Image.asset(imgName),
+              )
+            ],
+          )),
+    );
+  }
+
+  /*willExpiredCoupons*/
+  Widget createwillExpiredCoupons() {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(15, 0, 15, 10),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(3),
+          color: Color.fromRGBO(241, 241, 241, 0.7),
+        ),
+        height: 40,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                child: Icon(
+                  Icons.close,
+                  color: Color(0xff4c4c4c),
+                ),
+              ),
+              SizedBox(
+                width: 8,
+              ),
+              Expanded(child: Text("您有4个好礼即将过期")),
+              Text(
+                "立即查看",
+                style: TextStyle(color: ColorConstant.MainColor),
+              )
+            ],
           ),
         ),
-      ],
+      ),
+    );
+  }
+}
+
+class EveryDayStar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(0.0),
+      child: Column(
+        crossAxisAlignment:CrossAxisAlignment.start,
+        children: [Container(color: Colors.red,child: Text("信息",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),), createItem(), createItem(), createItem(), createItem(), createItem(), createItem()],
+      ),
+    );
+  }
+
+  Widget createItem() {
+    return Stack(
+      children: [Image.asset("assets/images/temp.png",height: 150,fit: BoxFit.fill,)],
     );
   }
 }

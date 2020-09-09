@@ -1,6 +1,8 @@
 <component name="libraryTable">
   <library name="Flutter Plugins" type="FlutterPluginsLibraryType">
-    <CLASSES />
+    <CLASSES>
+      <root url="file://$USER_HOME$/.pub-cache/git/flutter_marquee-918e202a54c775b51dc7eb1987b515a36f39a327" />
+    </CLASSES>
     <JAVADOC />
     <SOURCES />
   </library>
