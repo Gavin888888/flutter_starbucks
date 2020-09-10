@@ -72,13 +72,6 @@
             </list>
           </value>
         </entry>
-        <entry key="flutter_marquee">
-          <value>
-            <list>
-              <option value="$USER_HOME$/.pub-cache/git/flutter_marquee-918e202a54c775b51dc7eb1987b515a36f39a327/lib" />
-            </list>
-          </value>
-        </entry>
         <entry key="flutter_page_indicator">
           <value>
             <list>
@@ -170,6 +163,13 @@
             </list>
           </value>
         </entry>
+        <entry key="toast">
+          <value>
+            <list>
+              <option value="$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/toast-0.1.5/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="transformer_page_view">
           <value>
             <list>
@@ -194,7 +194,6 @@
       </option>
     </properties>
     <CLASSES>
-      <root url="file://$USER_HOME$/.pub-cache/git/flutter_marquee-918e202a54c775b51dc7eb1987b515a36f39a327/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/after_layout-1.0.7+2/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/async-2.4.2/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/boolean_selector-2.0.0/lib" />
@@ -215,6 +214,7 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/string_scanner-1.0.5/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/term_glyph-1.1.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/test_api-0.2.17/lib" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/toast-0.1.5/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/transformer_page_view-0.1.6/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/typed_data-1.2.0/lib" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.flutter-io.cn/vector_math-2.0.8/lib" />

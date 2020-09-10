@@ -48,28 +48,28 @@ class _LLTabBarPagesState extends State<LLTabBarPages> with TickerProviderStateM
     double itemWidth = MediaQuery.of(context).size.width / 5;
 
     return  Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
       floatingActionButton: Container(
         width: 70,
         height: 70,
         padding: EdgeInsets.all(3),
         margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(35),
-          color: Colors.white,
-        ),
+//        decoration: BoxDecoration(
+//          borderRadius: BorderRadius.circular(35),
+//          color: Colors.white,
+//        ),
         child: FloatingActionButton(
           child: Image.asset("assets/images/platform_home_frap_qrcode~iphone.png", width: 25, height: 25),
           onPressed: (){
             print("你点击了ADD");
-
           },
-          elevation: 5,
+          elevation: 8,
           backgroundColor: ColorConstant.MainColor,
         ),
       ),
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
         shape: CircularNotchedRectangle(), // 底部导航栏打一个圆形的洞
         child: Row(
             mainAxisAlignment: MainAxisAlignment.start,

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_starbucks/constant/color_constant.dart';
 import 'package:flutter_starbucks/pages/home/titleAnimation.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:toast/toast.dart';
 
 class LLHomePage extends StatelessWidget {
   @override
@@ -46,6 +48,12 @@ class _HomeMainState extends State<HomeMain> with TickerProviderStateMixin {
   AnimationController animationController;
   Animation<double> anim;
 
+  Future onRefresh() {
+    return Future.delayed(Duration(seconds: 1), () {
+      Toast.show('当前已是最新数据', context);
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -70,8 +78,11 @@ class _HomeMainState extends State<HomeMain> with TickerProviderStateMixin {
     }
     setState(() {
       prev_dy = changed;
-      extraPicHeight = extraPicHeight;
+      extraPicHeight = extraPicHeight <= 0 ? 0 : extraPicHeight;
       fitType = fitType;
+
+      print("-----prev_dy=${prev_dy}");
+      print("-----extraPicHeight=${extraPicHeight}");
     });
   }
 
@@ -97,101 +108,69 @@ class _HomeMainState extends State<HomeMain> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    double rpx = MediaQuery.of(context).size.width / 750;
 
-    return Listener(
-      onPointerMove: (result) {
-        updatePicHeight(result.position.dy);
-      },
-      onPointerUp: (_) {
-        runAnimate();
-        animationController.forward(from: 0);
-      },
-      child: CustomScrollView(
-
-        physics: ClampingScrollPhysics(),
-        slivers: <Widget>[
-          SliverAppBar(
-            pinned: true,
-            floating: true,
-            expandedHeight: (227 * width) / 434 -
-                44 +
-                extraPicHeight ,
-//                20 +
-//                35 +
-//                10 +
-//                60 +
-//                35 +
-//                (((width - 30) / 2) * 274) / 482 +
-//                10 +
-//                60,
-            backgroundColor: Colors.white,
-//            flexibleSpace: new FlexibleSpaceBar(
-//              background: Image.asset("assets/images/homepage.png", fit: BoxFit.cover),
-//            ),
-            flexibleSpace: FlexibleSpaceBar(
-              background: SliverTopBar(
-                extraPicHeight: extraPicHeight,
-                fitType: fitType,
+    return RefreshIndicator(
+      onRefresh: this.onRefresh,
+      child: Listener(
+        onPointerMove: (result) {
+          updatePicHeight(result.position.dy);
+        },
+        onPointerUp: (_) {
+          runAnimate();
+          animationController.forward(from: 0);
+        },
+        child: CustomScrollView(
+          physics: ClampingScrollPhysics(),
+          slivers: <Widget>[
+            SliverAppBar(
+              pinned: false,
+              floating: false,
+              expandedHeight: 180 + extraPicHeight * 0.2,
+              backgroundColor: Color(0x00ffffff),
+              flexibleSpace: FlexibleSpaceBar(
+                background: SliverTopBar(
+                  extraPicHeight: extraPicHeight,
+                  fitType: fitType,
+                ),
               ),
             ),
-          ),
-          SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-            return EveryDayStar();
-          }, childCount: 1))
-        ],
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, int index) {
+                  Container postPiece;
+                  if (index == 0) {
+                    postPiece = Container(child: createredits());
+                  }
+                  if (index == 1) {
+                    postPiece = Container(child: createLocation());
+                  }
+                  if (index == 2) {
+                    postPiece = Container(child: createCard(width));
+                  }
+                  if (index == 3) {
+                    postPiece = Container(child: createwillExpiredCoupons());
+                  }
+                  if (index == 4) {
+                    postPiece = Container(child: EveryDayStar());
+                  }
+                  if (index == 5) {
+                    postPiece = Container(child: SpecialOffer());
+                  }
+                  return postPiece;
+                },
+                childCount: 50,
+              ),
+            ),
+//          SliverList(
+//              delegate: SliverChildBuilderDelegate((context, index) {
+//            return EveryDayStar();
+//          }, childCount: 1))
+          ],
+        ),
       ),
     );
     //endregion
-  }
-}
-
-class SliverTopBar extends StatelessWidget {
-  const SliverTopBar(
-      {Key key, @required this.extraPicHeight, @required this.fitType})
-      : super(key: key);
-  final double extraPicHeight;
-  final BoxFit fitType;
-
-  @override
-  Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    return Stack(
-      children: <Widget>[
-        Column(
-          children: [
-            Image.asset(
-              "assets/images/homepage.png",
-              width: width,
-              height: (227 * width) / 434 + extraPicHeight,
-              fit: fitType,
-            ),
-//            SizedBox(
-//              height: 20,
-//            ),
-//            createredits(),
-//            LLTitleAnimation(),
-//            createLocation(),
-//            createCard(width),
-//            createwillExpiredCoupons()
-          ],
-        ),
-//        Positioned(
-//          top: (227 * width) / 434 + extraPicHeight - 10,
-//          child: ClipRRect(
-//            borderRadius: BorderRadius.only(
-//              topLeft: Radius.circular(8),
-//              topRight: Radius.circular(8),
-//            ),
-//            child: Container(
-//              height: 30,
-//              width: 750,
-//              color: Colors.white,
-//            ),
-//          ),
-//        ),
-      ],
-    );
   }
 
   /*创建积分*/
@@ -236,8 +215,6 @@ class SliverTopBar extends StatelessWidget {
       ),
     );
   }
-
-
 
   /*创建定位*/
   Widget createLocation() {
@@ -414,21 +391,182 @@ class SliverTopBar extends StatelessWidget {
   }
 }
 
+class SliverTopBar extends StatelessWidget {
+  const SliverTopBar(
+      {Key key, @required this.extraPicHeight, @required this.fitType})
+      : super(key: key);
+  final double extraPicHeight;
+  final BoxFit fitType;
+
+  @override
+  Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double rpx = MediaQuery.of(context).size.width / 750;
+    return Stack(
+      children: [
+        Image.asset(
+          "assets/images/homepage.png",
+          width: width,
+          height: 217 + extraPicHeight * 0.2,
+          fit: BoxFit.cover,
+        ),
+        Positioned(
+          bottom: 0,
+          height: 20,
+          left: 0,
+          right: 0,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
+              ),
+              color: Colors.white,
+            ),
+          ),
+        )
+      ],
+    );
+  }
+}
+
 class EveryDayStar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(0.0),
-      child: Column(
-        crossAxisAlignment:CrossAxisAlignment.start,
-        children: [Container(color: Colors.red,child: Text("信息",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),), createItem(), createItem(), createItem(), createItem(), createItem(), createItem()],
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              color: Colors.white,
+              child: Text(
+                "星礼点亮每天",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ),
+            createItem("assets/images/temp.png"),
+            createItem("assets/images/temp1.png"),
+          ],
+        ),
       ),
     );
   }
 
-  Widget createItem() {
-    return Stack(
-      children: [Image.asset("assets/images/temp.png",height: 150,fit: BoxFit.fill,)],
+  Widget createItem(imgname) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+      child: Stack(
+        children: [
+          Image.asset(
+            imgname,
+            height: 150,
+            fit: BoxFit.fill,
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class SpecialOffer extends StatelessWidget {
+  final List<String> imgs = [
+    "https://artwork.starbucks.com.cn/banners-homepage-banner/main_61babe13-d569-476b-8bd6-e75068943318.jpg",
+    "https://artwork.starbucks.com.cn/banners-homepage-banner/main_815bd96b-cf3f-407d-b623-26f35085bf99.jpg"
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(0.0),
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  color: Colors.white,
+                  child: Text(
+                    "限时好礼",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Container(
+                  color: Colors.white,
+                  child: Text(
+                    "查看更多",
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: ColorConstant.MainColor),
+                  ),
+                ),
+              ],
+            ),
+
+            Card(
+              elevation: 3, //设置阴影
+              shadowColor: Color(0xfff1f1f1),
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(8.0))),
+              child:Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: Colors.red,
+                  ),
+                  height: 150, // 高度 插件 flutter_screenutil
+                  child: Swiper(
+                    scrollDirection: Axis.horizontal,// 横向
+                    itemCount: imgs.length,// 数量
+                    autoplay: true, // 自动翻页
+                    itemBuilder: (BuildContext context, int index) {
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(imgs[index],
+                            fit: BoxFit.cover),
+                      );
+                    }, // 构建
+                    onTap: (index) {print('点击了第${index}');},// 点击事件 onTap
+                    pagination: SwiperPagination(// 分页指示器
+                        alignment: Alignment.bottomCenter,// 位置 Alignment.bottomCenter 底部中间
+                        margin: const EdgeInsets.fromLTRB(0, 0, 0, 5),// 距离调整
+                        builder: DotSwiperPaginationBuilder( // 指示器构建
+                            space: 5,// 点之间的间隔
+                            size: 10, // 没选中时的大小
+                            activeSize: 12,// 选中时的大小
+                            color: Colors.black54,// 没选中时的颜色
+                            activeColor: Colors.white)),// 选中时的颜色
+//                control: new SwiperControl(color: Colors.pink), // 页面控制器 左右翻页按钮
+//                  scale: 0.95,// 两张图片之间的间隔
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget createItem(imgname) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+      child: Stack(
+        children: [
+          Image.asset(
+            imgname,
+            height: 150,
+            fit: BoxFit.fill,
+          )
+        ],
+      ),
     );
   }
 }
